@@ -1,0 +1,37 @@
+version: '3'
+services:
+  db:
+    platform: linux/x86_64
+    image: mysql:8
+    container_name: go_rest_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      MYSQL_DATABASE: gorest
+    ports:
+      - "7801:3306"
+
+  flyway:
+    image: flyway/flyway:9.1
+    container_name: go_rest_flyway
+    command: -url=jdbc:mysql://db/gorest?allowPublicKeyRetrieval=true -user=root -password=root -connectRetries=60 -connectRetriesInterval=2 migrate
+    volumes:
+      - ./data/migrations:/flyway/sql
+    depends_on:
+      - db
+
+
+  api:
+    platform: linux/x86_64
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: go_rest_api
+    restart: always
+    ports:
+      - "7800:7800"
+    depends_on:
+      - db
+      - flyway  

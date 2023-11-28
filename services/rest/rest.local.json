@@ -1,0 +1,39 @@
+{
+    "app": {
+      "name": "go-rest-service",
+      "env": "local",
+      "enforceHeaders": false,
+      "tls": false,
+      "function": "restful"
+    },
+    "web": {
+      "maxHeaderBytes": "1 << 20",
+      "readHeaderTimeout": "5s",
+      "readTimeout": "5s",
+      "writeTimeout": "10s",
+      "idleTimeout": "120s",
+      "shutdownTimeout": "20s",
+      "apiHost": "0.0.0.0",
+      "apiPort": "7800",
+      "debugHost": "0.0.0.0:8700"
+    },
+    "log": {
+      "debug": true,
+      "json": false
+    },
+    "db": {
+      "type": "mysql",
+      "user": "root",
+      "password": "root",
+      "host": "0.0.0.0",
+      "port": 7801,
+      "dbName": "gorest",
+      "maxIdleConns": 0,
+      "maxOpenConns": 0,
+      "disableTLS": true
+    },
+    "metrics": {
+      "host": "",
+      "flushInterval": "1s"
+    }
+}

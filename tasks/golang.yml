@@ -1,0 +1,19 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/taskfile.json
+version: 3
+
+tasks:
+
+  run:
+    summary: |
+      Run program's entrypoint for local development.
+
+      A GO_PROJECT_FOLDER variable is used as the workdir
+      for the new process
+    preconditions:
+      - test ! -z "{{.GO_PROJECT_FOLDER}}"
+    env:
+      APP_ENV: local
+    dir: "{{.GO_PROJECT_FOLDER}}"
+    cmds:
+      - "go run main.go"

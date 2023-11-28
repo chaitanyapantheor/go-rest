@@ -1,0 +1,42 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/taskfile.json
+version: '3'
+
+includes:
+  docker:
+    taskfile: ./tasks/docker.yml
+    internal: true
+  go:
+    taskfile: ./tasks/golang.yml
+    internal: true
+  dev:
+    taskfile: ./tasks/dev.yml
+    internal: true
+
+vars:
+  GO_RESTFUL_FOLDER: .  
+
+tasks:
+  local-clean:
+    desc: "Cleans up all docker container."
+    cmds:
+      - task: docker:docker-compose-down
+
+  local-db:
+    desc: "Setup local DB and runs migration."
+    cmds:
+      - task: docker:local-db-build
+      - task: docker:local-migration-build
+
+  local-app:
+    desc: "Setup local app inside docker"
+    cmds:
+      - task: docker:local-app-build
+
+  run:local-app:
+    desc: "Run rest service locally."
+    dir: "{{.GO_RESTFUL_FOLDER}}"
+    cmds:
+      - task: go:run
+        vars:
+          GO_PROJECT_FOLDER: "{{.GO_RESTFUL_FOLDER}}"
